@@ -111,46 +111,51 @@ class Card_Conversion_Sum():
         return self.Dealersum
 
         
-    
-
-
-begingame = Deck()  #Begingame created as instance of Deck class
+    begingame = Deck()  #Begingame created as instance of Deck class
 begingame.build_deck() #The main Deck is created
 begingame.shuffle_cards() #The main Deck is shuffled
 dealcards = Deal_Cards() #dealcards created as instance of Deal_Cards class
 sum_conversion = Card_Conversion_Sum() #sum_conversion created as instance of Card_Conversion_Sum class
-b_dealer = 0   #b_dealer variable created to store dealer value sum
-nplayers = 1
-Game_on = True #Variable to create
-dealerdeck = []
+b_dealer = 0   
+nplayers = 1 
+Game_on = True 
+dealerdeck = [] #List that will store the dealer's deck
 number_of_players = int(input("How many players are going to play?: ")) #Number of players stored in the variable number_of_players
 players_dict = {} #Dictionary created to store player's deck, player's deck sum, and initial player question
 Done_list = [] #List created to append player's deck sum
 Dealer_BlackJack = False
 Player_BlackJack = False
 while nplayers <= number_of_players: #Create Pn dictionary, with the number of keys equal to the nunmber of players, to store player's deck, player's deck sum, and initial player question, per player. 
-    a = 'P' + str(nplayers) #The Pn dictionary key is created for each player
-    players_dict[a] = {'DECK':[],'SUM':0,'PLAYER_QUESTION':'HIT'} #Players initiate with an empty deck, a sum of 0, and question 'HIT'
-    nplayers+=1
+    a = 'P' + str(nplayers) 
+    players_dict[a] = {'DECK':[],'SUM':0,'PLAYER_QUESTION':'HIT'} 
+    nplayers+=1 
 
 ##########################################################################################
 ######################################DEALING CARDS#######################################
 ##########################################################################################
-turn = 1
-dealerdeckvalues = 0
-while dealerdeckvalues < 2:
-    dealerdeck.append(dealcards.deal_dealer_cards(begingame.allcards))
-    sum_conversion.convert_to_int_dealer(dealerdeck[dealerdeckvalues])
-    dealerdeckvalues+=1
-b_dealer = sum_conversion.sum_dealer_values()
 
+##############################################################################################################
+####Deal 2 cards to the dealer, convert them to integer, sum them and store that value in variable b_dealer###
+##############################################################################################################
+turn = 1  
+dealerdeckvalues = 0 
+while dealerdeckvalues < 2: #During the first turn, two cards are given to the dealer and to all the players. 
+    dealerdeck.append(dealcards.deal_dealer_cards(begingame.allcards)) 
+    sum_conversion.convert_to_int_dealer(dealerdeck[dealerdeckvalues]) 
+    dealerdeckvalues+=1 
+b_dealer = sum_conversion.sum_dealer_values() 
+
+##################################################################################
+#### - Deal 2 cards to each player and store them in players_dict[a]['DECK']  ####
+#### - Sum players' cards values and store that value in players_dict[a]['SUM']###    
+##################################################################################
 nplayers = 1
 while nplayers <= number_of_players:
     a = 'P' + str(nplayers)
     deckvalues = 0
     while deckvalues < 2:
         players_dict[a]['DECK'].append(dealcards.deal_player_cards(begingame.allcards))
-        sum_conversion.convert_to_int_player(players_dict[a]['DECK'][deckvalues])
+        sum_conversion.convert_to_int_player(players_dict[a]['DECK'][deckvalues]) #The cards are converted one at a time
         deckvalues+=1      
     players_dict[a]['SUM'] = sum_conversion.sum_player_values()
     print("---------------------------------")
@@ -158,7 +163,7 @@ while nplayers <= number_of_players:
     print("---------------------------------")
     for f in players_dict[a]['DECK']:
         print(f)
-    sum_conversion.reset_player_lists()
+    sum_conversion.reset_player_lists() #Reset the storing list before moving to the next player
     nplayers+=1
 
 print("#################################")
@@ -185,7 +190,7 @@ while nplayers <= number_of_players:
     a = 'P' + str(nplayers)
     turn = 1
     ########################
-    #GRAB CARTS PER PLAYERS#
+    #GRAB CARDS PER PLAYERS#
     ########################
     while True:
         if players_dict[a]['SUM'] == 21 and turn == 1:
@@ -230,7 +235,7 @@ while nplayers <= number_of_players:
     nplayers+=1
 
 ####################
-#GRAB CARTS DEALER#
+#GRAB CARDS DEALER#
 ###################
 print("#################################")
 print("Dealer Deck: ")
@@ -263,4 +268,3 @@ while Dealer_BlackJack == False:
         print ("The dealer BUST")
         break
  
-
